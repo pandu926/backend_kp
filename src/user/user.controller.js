@@ -7,7 +7,7 @@ const registerController = async (req, res) => {
     const data_user = req.body;
     console.log(data_user);
     const register_data = await service.registerService(data_user);
-    const token = register_data.password;
+    // const token = register_data.password;
     if (register_data) {
         // const subject = "confirm your register";
         // const message = `confirm your registration <a href=https://pencarikhuntuk.lol/${token}>confirm</a>`;
@@ -21,29 +21,46 @@ const registerController = async (req, res) => {
 
 }
 
-// const getUserSingleController = async(req, res) => {
-//     const {
-//         user_id
-//     } = req.params;
-//     const user_data = await service.getUserSingleService(user_id);
-//     if (user_data) {
-//         return res.status(200).json(user_data);
-//     }
-//     return res.status(404).json({
-//         msg: "tidak ada user"
-//     });
+const getUserSingleController = async (req, res) => {
+    const {
+        id
+    } = req.params;
 
-// }
+    const user_data = await service.getUserSingleService(id);
+    if (user_data) {
+        return res.status(200).json(user_data);
+    }
+    return res.status(404).json({
+        msg: "tidak ada user"
+    });
 
-// const updateController = async(req, res) => {
-//     const {
-//         id
-//     } = req.auth;
+}
 
-//     const data_user = req.body;
-//     const update_data = await service.updateService(id, data_user);
-//     return res.status(200).json(update_data);
-// }
+const updateController = async (req, res) => {
+    const {
+        id
+    } = req.auth;
+    const data_user = req.body;
+    if (data_user) {
+        const update_data = await service.updateService(id, data_user);
+        if (update_data) {
+            return res.status(200).json(update_data);
+        }
+    }
+
+
+}
+
+const deleteController = async (req, res) => {
+    const {
+        id
+    } = req.params;
+
+    const delete_data = await service.deleteService(id);
+    return res.status(200).json({
+        msg: "delete berhasil"
+    })
+}
 
 // const confirmUserController = async(req, res) => {
 //     const {
@@ -93,8 +110,9 @@ const registerController = async (req, res) => {
 
 const controller = {
     registerController,
-    // getUserSingleController,
-    // updateController,
+    getUserSingleController,
+    updateController,
+    deleteController
     // confirmUserController,
     // forgetPasswordController,
     // forgetRequstController
