@@ -1,66 +1,63 @@
 // const sendMail = require("../config/nodemailer");
-const service = require("./user.service");
-const repo = require("./user.repo")
+const bcrypt = require("bcrypt");
+const repo = require("../services/user.service");
 
 const registerController = async (req, res) => {
-
-    const data_user = req.body;
-    console.log(data_user);
-    const register_data = await service.registerService(data_user);
-    // const token = register_data.password;
-    if (register_data) {
-        // const subject = "confirm your register";
-        // const message = `confirm your registration <a href=https://pencarikhuntuk.lol/${token}>confirm</a>`;
-        // sendMail(data_user.emai, subject, message);
-        return res.status(200).json(register_data);
-
-    }
+  const data_user = req.body;
+  const checkNim = data_user.nim;
+  const hashPassword = await bcrypt.hash(data_user.password, 10);
+  const data = await repo.getUserSingleRepo({ checkNim });
+  if (data) {
     return res.status(400).json({
-        msg: "email sudah terdaftar"
+      msg: "nim sudah terdaftar",
     });
+  }
 
-}
+  const register_data = await repo.registerRepo(data_user, hashPassword);
+  if (register_data) {
+    // const subject = "confirm your register";
+    // const message = `confirm your registration <a href=https://pencarikhuntuk.lol/${token}>confirm</a>`;
+    // sendMail(data_user.emai, subject, message);
+    return res.status(200).json(register_data);
+  }
+};
 
 const getUserSingleController = async (req, res) => {
-    const {
-        id
-    } = req.params;
-
-    const user_data = await service.getUserSingleService(id);
-    if (user_data) {
-        return res.status(200).json(user_data);
-    }
-    return res.status(404).json({
-        msg: "tidak ada user"
-    });
-
-}
+  const { id } = req.params;
+  const user_data = await repo.getUserSingleRepo({ id });
+  if (user_data) {
+    return res.status(200).json(user_data);
+  }
+  return res.status(404).json({
+    msg: "tidak ada user",
+  });
+};
 
 const updateController = async (req, res) => {
-    const {
-        id
-    } = req.auth;
-    const data_user = req.body;
-    if (data_user) {
-        const update_data = await service.updateService(id, data_user);
-        if (update_data) {
-            return res.status(200).json(update_data);
-        }
+  const { id } = req.params;
+  const data_user = req.body;
+  const hashPassword = await bcrypt.hash(data_user.password, 10);
+  if (data_user) {
+    const update_data = await repo.updateRepo({
+      id,
+      data_user,
+      hashPassword,
+    });
+    if (update_data) {
+      return res.status(200).json(update_data);
     }
-
-
-}
+  }
+};
 
 const deleteController = async (req, res) => {
-    const {
-        id
-    } = req.params;
-
-    const delete_data = await service.deleteService(id);
+  const { id } = req.params;
+  const delete_data = await repo.deleteRepo(id);
+  if (delete_data) {
     return res.status(200).json({
-        msg: "delete berhasil"
-    })
-}
+      msg: "delete berhasil",
+    });
+  }
+};
 
 // const confirmUserController = async(req, res) => {
 //     const {
@@ -107,15 +104,14 @@ const deleteController = async (req, res) => {
 //     return res.json(data);
 // }
 
-
 const controller = {
-    registerController,
-    getUserSingleController,
-    updateController,
-    deleteController
-    // confirmUserController,
-    // forgetPasswordController,
-    // forgetRequstController
-}
+  registerController,
+  getUserSingleController,
+  updateController,
+  deleteController,
+  // confirmUserController,
+  // forgetPasswordController,
+  // forgetRequstController
+};
 
 module.exports = controller;
