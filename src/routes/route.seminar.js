@@ -6,7 +6,8 @@ seminarRoute.get("/seminar", (req, res) => {
   return res.send("seminar");
 });
 seminarRoute.post("/seminar/add", conn.addSeminar);
-seminarRoute.get("/seminar/:id", conn.getSeminar);
+seminarRoute.get("/seminar/list", conn.getSeminar);
+seminarRoute.get("/seminar/latest", conn.getSeminarLatest);
 seminarRoute.put("/seminar/update/:id", conn.updateSeminar);
 seminarRoute.delete("/seminar/delete/:id", conn.deleteSeminar);
 

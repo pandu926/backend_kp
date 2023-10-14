@@ -23,7 +23,11 @@ const registerController = async (req, res) => {
 };
 
 const getUserSingleController = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.query;
+  if (typeof id == "undefined") {
+    const user_data = await repo.getUserSingleRepo({ id });
+    return res.status(200).json(user_data);
+  }
   const user_data = await repo.getUserSingleRepo({ id });
   if (user_data) {
     return res.status(200).json(user_data);

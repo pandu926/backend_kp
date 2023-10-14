@@ -18,11 +18,15 @@ const getUserSingleRepo = async ({ id, checkNim }) => {
   const nim = checkNim;
   console.log(nim, id);
   if (typeof nim == "undefined") {
-    return await user.findOne({
-      where: {
-        id,
-      },
-    });
+    if (typeof id == "undefined") {
+      return await user.findAll();
+    } else {
+      return await user.findOne({
+        where: {
+          id,
+        },
+      });
+    }
   } else {
     return await user.findOne({
       where: {

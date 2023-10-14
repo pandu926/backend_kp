@@ -10,8 +10,11 @@ const addSeminar = async (req, res) => {
   }
 };
 const getSeminar = async (req, res) => {
-  const { id } = req.params;
-
+  const { id } = req.query;
+  if (typeof id == "undefined") {
+    const data = await service.get(id);
+    return res.status(200).json(data);
+  }
   const data = await service.get(id);
   if (data) {
     return res.status(200).json(data);
@@ -37,6 +40,20 @@ const deleteSeminar = async (req, res) => {
   return res.status(404).send("tidak ada");
 };
 
-const conn = { addSeminar, getSeminar, updateSeminar, deleteSeminar };
+const getSeminarLatest = async (req, res) => {
+  const respone = await service.seminarLatest();
+  if (respone) {
+    return res.status(200).json(respone);
+  }
+  return res.status(404).send("tidak ada");
+};
+
+const conn = {
+  addSeminar,
+  getSeminar,
+  updateSeminar,
+  deleteSeminar,
+  getSeminarLatest,
+};
 
 module.exports = conn;

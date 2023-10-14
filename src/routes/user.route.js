@@ -10,11 +10,7 @@ userRoute.get("/user", (req, res) => {
 });
 
 userRoute.post("/auth/register", controller.registerController);
-userRoute.get(
-  "/user/:id",
-  tokenVerification,
-  controller.getUserSingleController
-);
+userRoute.get("/user/list", controller.getUserSingleController);
 userRoute.put("/user/update/:id", controller.updateController);
 userRoute.delete("/user/delete/:id", controller.deleteController);
 userRoute.post("/auth/login", authController);
