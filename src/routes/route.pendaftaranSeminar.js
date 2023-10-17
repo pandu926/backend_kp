@@ -8,5 +8,6 @@ pendaftaranRoute.get("/daftarseminar", (req, res) => {
 pendaftaranRoute.post("/daftarseminar", conn.registerController);
 pendaftaranRoute.get("/daftarseminar/peserta/:id", conn.getSingleData);
 pendaftaranRoute.get("/daftarseminar/peserta", conn.getAllData);
+pendaftaranRoute.put("/daftarseminar/peserta/:id", conn.updateController);
 
 module.exports = pendaftaranRoute;

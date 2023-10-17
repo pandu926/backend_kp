@@ -32,7 +32,9 @@ const getSingleData = async (req, res) => {
 };
 
 const getAllData = async (req, res) => {
-  const data = await service.getDataAllService();
+  id_user = req.query.id;
+  console.log(id_user);
+  const data = await service.getDataAllRepo(id_user);
   if (data) {
     return res.status(200).json(data);
   }
@@ -40,11 +42,8 @@ const getAllData = async (req, res) => {
 
 const updateController = async (req, res) => {
   const { id } = req.params;
-  const data_user = req.body;
-  const data = await service.updateService({
-    id,
-    data_user,
-  });
+  const data_input = req.body;
+  const data = await service.updateService(id, data_input);
   if (data) {
     return res.status(200).json(data);
   }
