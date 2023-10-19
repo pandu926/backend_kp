@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const port = 8000;
+const port = 443;
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./src/config/swagger");
 
@@ -10,6 +10,7 @@ const seminarRoute = require("./src/routes/route.seminar");
 const userRoute = require("./src/routes/user.route");
 const sertifikatRoute = require("./src/routes/route.sertifikat");
 const pendaftaranRoute = require("./src/routes/route.pendaftaranSeminar");
+const pengumumanRoute = require("./src/routes/route.pengumuman");
 
 const fs = require("fs");
 const https = require("https");
@@ -37,15 +38,16 @@ app.use(userRoute);
 app.use(sertifikatRoute);
 app.use(seminarRoute);
 app.use(pendaftaranRoute);
+app.use(pengumumanRoute);
 
 app.get("/", (req, res) => {
   return res.send("berhasil");
 });
 
-app.listen(port, () => {
-  console.log("website listen in port " + port);
-});
-
-// https.createServer(options, app).listen(port, function () {
-//   console.log("Express server listening on port " + port);
+// app.listen(port, () => {
+//   console.log("website listen in port " + port);
 // });
+
+https.createServer(options, app).listen(port, function () {
+  console.log("Express server listening on port " + port);
+});

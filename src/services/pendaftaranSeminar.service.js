@@ -1,4 +1,15 @@
-const { pendaftaran_Seminar } = require("../database/models");
+const { pendaftaran_Seminar, user, seminar } = require("../database/models");
+const { sequelize } = require("../database/models"); // Sesuaikan path sesuai dengan lokasi model Anda
+
+sequelize
+  .sync()
+  .then(() => {
+    console.log("Database synchronized successfully");
+    // Start your Node.js application here
+  })
+  .catch((error) => {
+    console.error("Error synchronizing database:", error);
+  });
 
 const registerRepo = async (data_input) => {
   return await pendaftaran_Seminar.create(data_input);
@@ -28,6 +39,12 @@ const getDataAllRepo = async (id_user) => {
   }
   return await pendaftaran_Seminar.findAll({
     where: { id_user },
+    include: [
+      {
+        model: seminar,
+        as: "seminar", // Alias yang digunakan dalam model seminar
+      },
+    ],
   });
 };
 

@@ -1,16 +1,18 @@
-"use strict";
+// Model "user" definition
 const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
   class user extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      user.belongsToMany(models.seminar, {
+        through: models.pendaftaran_Seminar, // Model pivot
+        foreignKey: "id_user", // Foreign key yang menghubungkan "user" ke "pendaftaran_Seminar"
+        otherKey: "id_seminar", // Foreign key yang menghubungkan "seminar" ke "pendaftaran_Seminar"
+        as: "seminars", // Anda dapat memberikan alias sesuai kebutuhan
+      });
     }
   }
+
   user.init(
     {
       nim: DataTypes.INTEGER,
@@ -25,5 +27,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "user",
     }
   );
+
   return user;
 };
